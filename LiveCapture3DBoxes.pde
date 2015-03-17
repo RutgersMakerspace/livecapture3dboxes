@@ -14,6 +14,7 @@ Capture cam;
 boolean record;
 boolean reset = false;
 boolean solid = false;
+boolean snap = false;
 int num = 0;
 
 PImage img;  // The source image
