@@ -1,4 +1,4 @@
-import processing.dxf.*;
+import nervoussystem.obj.*;
 
 /**
  * Getting Started with Capture.
@@ -23,6 +23,7 @@ int cellsize = 2; // Dimensions of each cell in the grid
 float fcellsize = float(cellsize);
 int columns, rows;   // Number of columns and rows in our system
 
+MeshExport x3D;
 
 void setup() {
   size(1200, 800, P3D);
@@ -70,9 +71,7 @@ void setup() {
 
 void draw() {
   background(0);
-  if (record) {
-    beginRaw(DXF, "output.dxf");
-  }
+
   if (cam.available())
   {
     cam.read();
@@ -144,11 +143,25 @@ void draw() {
       }
     }
   }
-
+  /*
+  if (record) {
+   //export an x3d file, change to OBJExport for obj
+   x3D = (MeshExport) createGraphics(320, 240, "nervoussystem.obj.X3DExport", "lc.x3d");
+   x3D.setColor(true);
+   x3D.beginDraw();
+   //drawNoise(x3D);
+   }
+   */
 
   //image(cam, 140, 0);
+  /*
   if (record) {
-    endRaw();
+   x3D.endDraw();
+   x3D.dispose();
+   record = false;
+   }
+   */
+  if (record) {
     record = false;
   }
   if (snap) {
