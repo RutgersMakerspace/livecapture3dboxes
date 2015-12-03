@@ -1,4 +1,4 @@
-import processing.dxf.*;
+import nervoussystem.obj.*;
 
 /**
  * Getting Started with Capture.
@@ -13,7 +13,8 @@ PeasyCam pcam;
 Capture cam;
 boolean record;
 boolean reset = false;
-boolean solid = false;
+int  mode = 0;
+int modes = 4; //starting at 0
 boolean snap = false;
 int num = 0;
 
@@ -22,6 +23,7 @@ int cellsize = 2; // Dimensions of each cell in the grid
 float fcellsize = float(cellsize);
 int columns, rows;   // Number of columns and rows in our system
 
+MeshExport x3D;
 
 void setup() {
   size(1200, 800, P3D);
@@ -69,9 +71,7 @@ void setup() {
 
 void draw() {
   background(0);
-  if (record) {
-    beginRaw(DXF, "output.dxf");
-  }
+
   if (cam.available())
   {
     cam.read();
@@ -95,35 +95,77 @@ void draw() {
         // Translate to the location, set fill and stroke, and draw the rect
         pushMatrix();
         // translate(x + 200, y + 100);
-        translate(x-160, y-120, z );
-        fill(c, 204);
-        noStroke();
         // rectMode(CENTER);
         //rect(0, 0, cellsize, cellsize);
         //ellipseMode(CENTER);
         //ellipse(0, 0, cellsize, cellsize);
         //box(cellsize, cellsize, cellsize);
-        if  (solid)
-        {
-          box(cellsize, cellsize, z);
-        } else
-        {
+        switch  (mode) {
+        case 0:
+          translate(x-160, y-120, z );
+          fill(c, 204);
+          noStroke();
           box(cellsize, cellsize, cellsize);
+          break;
+        case 1:
+          translate(x-160, y-120, cellsize );
+          fill(c, 204);
+          noStroke();
+          box(cellsize, cellsize, z);
+          break;
+        case 2:
+          translate(x-160, y-120, z );
+          fill(c, 204);
+          noStroke();
+          box(cellsize, cellsize, z);
+          break;
+        case 3:
+          translate(x-160, y-120, z );
+          fill(c, 204);
+          noStroke();
+          box(cellsize, cellsize, 0);
+          break;
+        case 4:
+          translate(x-160, y-120, z );
+          fill(c, 204);
+          noStroke();
+          ellipse(0, 0, cellsize, cellsize);
+          break;
+        default: 
+          translate(x-160, y-120, cellsize );
+          fill(c, 204);
+          noStroke();
+          box(cellsize, cellsize, cellsize);
+          break;
         }
         //sphere(fcellsize);
         popMatrix();
       }
     }
   }
-
+  /*
+  if (record) {
+   //export an x3d file, change to OBJExport for obj
+   x3D = (MeshExport) createGraphics(320, 240, "nervoussystem.obj.X3DExport", "lc.x3d");
+   x3D.setColor(true);
+   x3D.beginDraw();
+   //drawNoise(x3D);
+   }
+   */
 
   //image(cam, 140, 0);
+  /*
   if (record) {
-    endRaw();
+   x3D.endDraw();
+   x3D.dispose();
+   record = false;
+   }
+   */
+  if (record) {
     record = false;
   }
   if (snap) {
-     snap = false; 
+    snap = false;
   }
   if (reset) {
     pcam.reset();
@@ -147,17 +189,17 @@ int grayscale(color _c) {
 void keyPressed() {
   // use a key press so that it doesn't make a million files
   if (key == 'r') record = true;
-  if (key == 's') 
+  if (key == TAB) 
   {
-    if (solid)
+    if (mode < modes) 
     {
-      solid = false;
-    } 
-    else
+      mode++;
+    } else
     {
-      solid = true;
+      mode = 0;
     }
   }
+
   if (key == ESC) {
     key = 0;
     reset = true;
