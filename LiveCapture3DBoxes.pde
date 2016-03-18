@@ -26,7 +26,9 @@ int columns, rows;   // Number of columns and rows in our system
 MeshExport x3D;
 
 void setup() {
-  size(1200, 800, P3D);
+ // size(1200, 800, P3D);
+  size(1920, 1080, P3D);
+
 
   String[] cameras = Capture.list();
 
@@ -43,7 +45,7 @@ void setup() {
 
   // If no device is specified, will just use the default.  
   cam = new Capture(this, 320, 240);
-  // cam = new Capture(this, 320, 240, "Logitech Camera", 15);
+  //cam = new Capture(this, 320, 240, "Logitech Camera", 15);
 
   pcam = new PeasyCam(this, width);
   pcam.setMinimumDistance(100);
@@ -205,10 +207,12 @@ void keyPressed() {
     reset = true;
   }
   if (key == ' ') {
-    num++;
-    save("bgphoto" + num + ".png" );
-    img = loadImage("bgphoto" + num + ".png"); 
+    //num++;
+    saveFrame("./output/bgphoto####.png" );
+    //img = loadImage("bgphoto" + num + ".png"); 
+    img = cam;
+
+   // img = image(cam, 0, 0, cam.width, cam.height);
     img.resize(cam.width, cam.height);
   }
 }
-
